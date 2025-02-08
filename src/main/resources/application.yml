@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILE:local}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
