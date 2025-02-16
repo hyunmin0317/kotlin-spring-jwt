@@ -3,7 +3,7 @@ package com.hyunmin.kopring.global.exception
 import com.hyunmin.kopring.global.exception.code.ErrorCode
 
 class GeneralException(
-    private val errorCode: ErrorCode
+    val errorCode: ErrorCode
 ) : RuntimeException() {
 
     override val message: String
