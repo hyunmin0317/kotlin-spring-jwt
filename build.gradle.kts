@@ -33,7 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // Swagger/OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 
     // JSON Web Token
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")
