@@ -1,7 +1,7 @@
 package com.hyunmin.kopring.global.common.entity.enums
 
 enum class MemberRole(
-    val description: String
+    private val description: String
 ) {
     ROLE_USER("회원"),
     ROLE_ADMIN("관리자"),

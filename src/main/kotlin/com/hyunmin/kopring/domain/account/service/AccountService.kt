@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class AccountService(
-    val memberRepository: MemberRepository,
-    val passwordEncoder: PasswordEncoder,
-    val jwtTokenProvider: JwtTokenProvider
+    private val memberRepository: MemberRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     fun register(request: RegisterRequest): RegisterResponse {
