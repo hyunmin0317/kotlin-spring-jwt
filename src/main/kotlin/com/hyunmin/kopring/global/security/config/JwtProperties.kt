@@ -20,13 +20,10 @@ data class JwtProperties(
     )
 
     // 비밀 키 생성
-    fun getSecretKey(): SecretKey {
-        val keyBytes = secret.toByteArray(StandardCharsets.UTF_8)
-        return SecretKeySpec(keyBytes, Jwts.SIG.HS256.key().build().algorithm)
-    }
+    fun getSecretKey(): SecretKey =
+        SecretKeySpec(secret.toByteArray(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().algorithm)
 
     // JWT 토큰의 만료 시간을 반환
-    fun getExpirationTime(isRefresh: Boolean): Long {
-        return if (isRefresh) token.refreshExpirationTime else token.accessExpirationTime
-    }
+    fun getExpirationTime(isRefresh: Boolean): Long =
+        if (isRefresh) token.refreshExpirationTime else token.accessExpirationTime
 }

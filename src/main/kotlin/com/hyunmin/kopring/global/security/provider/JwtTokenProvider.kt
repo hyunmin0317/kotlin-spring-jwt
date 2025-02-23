@@ -17,19 +17,15 @@ class JwtTokenProvider(
     /**
      * JWT access 토큰 생성
      */
-    fun createAccessToken(memberId: Long, memberRole: MemberRole, isRefresh: Boolean): String {
-        return Jwts.builder()
+    fun createAccessToken(memberId: Long, memberRole: MemberRole, isRefresh: Boolean): String =
+        Jwts.builder()
             .subject(memberId.toString())
             .claim("memberRole", memberRole.name)
             .signWith(jwtProperties.getSecretKey())
             .expiration(expirationDate(isRefresh))
             .compact()
-    }
 
     // 액세스 토큰의 만료 시간 계산
-    private fun expirationDate(isRefresh: Boolean): Date {
-        val now = Date()
-        val expirationTime = jwtProperties.getExpirationTime(isRefresh) * 1000
-        return Date(now.time + expirationTime)
-    }
+    private fun expirationDate(isRefresh: Boolean): Date =
+        Date(Date().time + jwtProperties.getExpirationTime(isRefresh) * 1000)
 }
