@@ -2,6 +2,12 @@ spring:
   profiles:
     active: ${SPRING_PROFILE:local}
 
+jwt:
+  secret: ${JWT_SECRET:secret}
+  token:
+    access-expiration-time: 1800 # 30 minutes
+    refresh-expiration-time: 1209600 # 14 days
+
 management:
   endpoints:
     web:
