@@ -2,7 +2,7 @@ package com.hyunmin.kopring.global.exception
 
 import com.hyunmin.kopring.global.exception.code.ErrorCode
 
-class GeneralException(
+open class GeneralException(
     val errorCode: ErrorCode
 ) : RuntimeException() {
 
