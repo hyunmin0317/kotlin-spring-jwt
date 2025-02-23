@@ -1,5 +1,7 @@
 package com.hyunmin.kopring.domain.account.controller
 
+import com.hyunmin.kopring.domain.account.dto.LoginRequest
+import com.hyunmin.kopring.domain.account.dto.LoginResponse
 import com.hyunmin.kopring.domain.account.dto.RegisterRequest
 import com.hyunmin.kopring.domain.account.dto.RegisterResponse
 import com.hyunmin.kopring.domain.account.service.AccountService
@@ -21,5 +23,11 @@ class AccountController(
     fun register(@Valid @RequestBody request: RegisterRequest): ResponseEntity<RegisterResponse> {
         val response = accountService.register(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
+    }
+
+    @PostMapping("/login")
+    fun login(@Valid @RequestBody requestDto: LoginRequest): ResponseEntity<LoginResponse> {
+        val responseDto: LoginResponse = accountService.login(requestDto)
+        return ResponseEntity.ok(responseDto)
     }
 }
