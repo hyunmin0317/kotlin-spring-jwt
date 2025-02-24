@@ -1,5 +1,6 @@
 package com.hyunmin.kopring.global.security.config
 
+import com.hyunmin.kopring.global.security.filter.JwtAuthenticationExceptionFilter
 import com.hyunmin.kopring.global.security.filter.JwtAuthenticationFilter
 import com.hyunmin.kopring.global.security.provider.JwtTokenProvider
 import org.springframework.context.annotation.Bean
@@ -50,9 +51,11 @@ class SecurityConfig(
 
         // JWT 기반 인증을 처리하기 위해 JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 추가
         http.addFilterBefore(
-            JwtAuthenticationFilter(jwtTokenProvider),
-            UsernamePasswordAuthenticationFilter::class.java
+            JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java
         )
+
+        // JWT 인증 예외 핸들링 필터 추가
+        http.addFilterBefore(JwtAuthenticationExceptionFilter(), JwtAuthenticationFilter::class.java)
 
         return http.build()
     }
