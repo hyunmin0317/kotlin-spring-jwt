@@ -2,6 +2,7 @@ package com.hyunmin.kopring.global.security.config
 
 import com.hyunmin.kopring.global.security.filter.JwtAuthenticationExceptionFilter
 import com.hyunmin.kopring.global.security.filter.JwtAuthenticationFilter
+import com.hyunmin.kopring.global.security.handler.JwtAccessDeniedHandler
 import com.hyunmin.kopring.global.security.handler.JwtAuthenticationEntryPoint
 import com.hyunmin.kopring.global.security.provider.JwtTokenProvider
 import org.springframework.context.annotation.Bean
@@ -61,6 +62,7 @@ class SecurityConfig(
         // 인증 및 인가 오류 핸들러 추가
         http.exceptionHandling {
             it.authenticationEntryPoint(JwtAuthenticationEntryPoint())
+            it.accessDeniedHandler(JwtAccessDeniedHandler())
         }
 
         return http.build()
