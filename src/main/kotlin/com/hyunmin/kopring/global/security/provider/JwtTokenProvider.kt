@@ -11,7 +11,6 @@ import io.jsonwebtoken.Jwts
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
@@ -40,10 +39,10 @@ class JwtTokenProvider(
     /**
      * 요청 헤더에서 JWT 토큰 추출
      */
-    fun resolveToken(request: HttpServletRequest): String? {
-        val bearerToken = request.getHeader("Authorization")
-        return if (bearerToken?.startsWith("Bearer ") == true) bearerToken.substring(7) else null
-    }
+    fun resolveToken(request: HttpServletRequest): String? =
+        request.getHeader("Authorization")
+            ?.takeIf { it.startsWith("Bearer ") }
+            ?.substring(7)
 
     /**
      * JWT 토큰 유효성 검증
@@ -68,7 +67,7 @@ class JwtTokenProvider(
     fun getAuthentication(token: String?): Authentication {
         val claims = getClaims(token)
         val memberRole = claims["memberRole"].toString()
-        val authorities: Collection<GrantedAuthority?> = listOf(SimpleGrantedAuthority(memberRole))
+        val authorities = listOf(SimpleGrantedAuthority(memberRole))
         val principal = User(claims.subject, "", authorities)
         return UsernamePasswordAuthenticationToken(principal, token, authorities)
     }
