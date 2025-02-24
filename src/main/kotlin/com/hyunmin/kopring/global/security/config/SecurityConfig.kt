@@ -1,5 +1,7 @@
 package com.hyunmin.kopring.global.security.config
 
+import com.hyunmin.kopring.global.security.filter.JwtAuthenticationFilter
+import com.hyunmin.kopring.global.security.provider.JwtTokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -7,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 /**
  * Spring Security 설정을 구성하는 클래스
@@ -14,7 +17,9 @@ import org.springframework.security.web.SecurityFilterChain
  */
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val jwtTokenProvider: JwtTokenProvider
+) {
 
     /**
      * BCrypt 암호화 방식으로 PasswordEncoder 빈을 생성
@@ -42,6 +47,12 @@ class SecurityConfig {
             // 나머지 모든 요청은 인증 필요
             it.anyRequest().authenticated()
         }
+
+        // JWT 기반 인증을 처리하기 위해 JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 추가
+        http.addFilterBefore(
+            JwtAuthenticationFilter(jwtTokenProvider),
+            UsernamePasswordAuthenticationFilter::class.java
+        )
 
         return http.build()
     }
