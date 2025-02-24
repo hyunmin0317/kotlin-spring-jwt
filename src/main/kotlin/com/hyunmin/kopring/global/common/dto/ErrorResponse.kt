@@ -1,6 +1,7 @@
 package com.hyunmin.kopring.global.common.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.hyunmin.kopring.global.exception.code.ErrorCode
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,7 +15,11 @@ data class ErrorResponse<T>(
     val detail: T? = null
 ) {
 
+    fun toJsonString(): String = objectMapper.writeValueAsString(this)
+
     companion object {
+        private val objectMapper = ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
+
         fun handle(errorCode: ErrorCode): ResponseEntity<ErrorResponse<Void>> =
             ResponseEntity
                 .status(HttpStatus.valueOf(errorCode.value))
@@ -28,7 +33,7 @@ data class ErrorResponse<T>(
                 .status(HttpStatus.valueOf(errorCode.value))
                 .body(of(errorCode, fieldErrors))
 
-        private fun <T> from(errorCode: ErrorCode): ErrorResponse<T> =
+        fun <T> from(errorCode: ErrorCode): ErrorResponse<T> =
             ErrorResponse(errorCode.code, errorCode.message, null)
 
         private fun of(errorCode: ErrorCode, fieldErrors: List<FieldError>): ErrorResponse<Map<String, String>> =
