@@ -49,9 +49,9 @@ class JwtTokenProvider(
      */
     fun validateToken(token: String?): Boolean {
         if (!StringUtils.hasText(token)) return false
-        try {
+        return try {
             getClaims(token)
-            return true
+            true
         } catch (e: ExpiredJwtException) {
             throw JwtAuthenticationException(ErrorCode.EXPIRED_JWT_EXCEPTION)
         } catch (e: JwtException) {
