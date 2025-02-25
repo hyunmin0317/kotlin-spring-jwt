@@ -29,15 +29,15 @@ class AccountService(
     }
 
     fun login(requestDto: LoginRequest): LoginResponse {
-        val member: Member = memberRepository.findByUsername(requestDto.username)
+        val member = memberRepository.findByUsername(requestDto.username)
             .orElseThrow { GeneralException(ErrorCode.ACCOUNT_NOT_FOUND) }
         checkPassword(requestDto.password, member.password)
         return generateToken(member.id!!, member.role)
     }
 
     private fun generateToken(memberId: Long, memberRole: MemberRole): LoginResponse {
-        val accessToken: String = jwtTokenProvider.createAccessToken(memberId, memberRole, false)
-        val refreshToken: String = jwtTokenProvider.createAccessToken(memberId, memberRole, true)
+        val accessToken = jwtTokenProvider.createAccessToken(memberId, memberRole, false)
+        val refreshToken = jwtTokenProvider.createAccessToken(memberId, memberRole, true)
         return LoginResponse(memberId, accessToken, refreshToken)
     }
 

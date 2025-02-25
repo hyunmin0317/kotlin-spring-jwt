@@ -27,7 +27,7 @@ class AccountController(
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody requestDto: LoginRequest): ResponseEntity<LoginResponse> {
-        val responseDto: LoginResponse = accountService.login(requestDto)
+        val responseDto = accountService.login(requestDto)
         return ResponseEntity.ok(responseDto)
     }
 }
