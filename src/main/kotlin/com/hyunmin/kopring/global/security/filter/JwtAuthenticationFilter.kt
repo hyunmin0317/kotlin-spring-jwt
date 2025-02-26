@@ -21,7 +21,7 @@ class JwtAuthenticationFilter(
 
         // JWT 토큰이 유효한지 검증 후 인증 정보를 가져와서 설정
         val authentication =
-            if (jwtTokenProvider.validateToken(jwt)) jwtTokenProvider.getAuthentication(jwt) else null
+            if (jwtTokenProvider.validateToken(jwt, false)) jwtTokenProvider.getAuthentication(jwt) else null
 
         // 인증 정보를 SecurityContext에 설정
         SecurityContextHolder.getContext().authentication = authentication

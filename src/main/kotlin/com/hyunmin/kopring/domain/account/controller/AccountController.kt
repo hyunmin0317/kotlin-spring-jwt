@@ -1,9 +1,6 @@
 package com.hyunmin.kopring.domain.account.controller
 
-import com.hyunmin.kopring.domain.account.dto.LoginRequest
-import com.hyunmin.kopring.domain.account.dto.LoginResponse
-import com.hyunmin.kopring.domain.account.dto.RegisterRequest
-import com.hyunmin.kopring.domain.account.dto.RegisterResponse
+import com.hyunmin.kopring.domain.account.dto.*
 import com.hyunmin.kopring.domain.account.service.AccountService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -26,8 +23,14 @@ class AccountController(
     }
 
     @PostMapping("/login")
-    fun login(@Valid @RequestBody requestDto: LoginRequest): ResponseEntity<LoginResponse> {
-        val responseDto = accountService.login(requestDto)
-        return ResponseEntity.ok(responseDto)
+    fun login(@Valid @RequestBody request: LoginRequest): ResponseEntity<LoginResponse> {
+        val response = accountService.login(request)
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(@Valid @RequestBody request: RefreshRequest): ResponseEntity<LoginResponse> {
+        val response = accountService.refresh(request)
+        return ResponseEntity.ok(response)
     }
 }

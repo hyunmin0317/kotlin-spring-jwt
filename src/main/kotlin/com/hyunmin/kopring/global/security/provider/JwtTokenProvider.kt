@@ -47,13 +47,13 @@ class JwtTokenProvider(
     /**
      * JWT 토큰 유효성 검증
      */
-    fun validateToken(token: String?): Boolean {
+    fun validateToken(token: String?, isRefresh: Boolean): Boolean {
         if (!StringUtils.hasText(token)) return false
         return try {
             getClaims(token)
             true
         } catch (e: ExpiredJwtException) {
-            throw JwtAuthenticationException(ErrorCode.EXPIRED_JWT_EXCEPTION)
+            throw JwtAuthenticationException(if (isRefresh) ErrorCode.RELOGIN_EXCEPTION else ErrorCode.EXPIRED_JWT_EXCEPTION)
         } catch (e: JwtException) {
             throw JwtAuthenticationException(ErrorCode.INVALID_TOKEN_EXCEPTION)
         } catch (e: IllegalArgumentException) {

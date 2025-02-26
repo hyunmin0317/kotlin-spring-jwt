@@ -1,9 +1,6 @@
 package com.hyunmin.kopring.domain.account.service
 
-import com.hyunmin.kopring.domain.account.dto.LoginRequest
-import com.hyunmin.kopring.domain.account.dto.LoginResponse
-import com.hyunmin.kopring.domain.account.dto.RegisterRequest
-import com.hyunmin.kopring.domain.account.dto.RegisterResponse
+import com.hyunmin.kopring.domain.account.dto.*
 import com.hyunmin.kopring.global.common.entity.Member
 import com.hyunmin.kopring.global.common.entity.enums.MemberRole
 import com.hyunmin.kopring.global.common.repository.MemberRepository
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class AccountService(
     private val memberRepository: MemberRepository,
+    private val refreshTokenService: RefreshTokenService,
     private val passwordEncoder: PasswordEncoder,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
@@ -28,16 +26,26 @@ class AccountService(
         return RegisterResponse(saved.id!!, saved.username, saved.role, saved.createdAt)
     }
 
-    fun login(requestDto: LoginRequest): LoginResponse {
-        val member = memberRepository.findByUsername(requestDto.username)
+    fun login(request: LoginRequest): LoginResponse {
+        val member = memberRepository.findByUsername(request.username)
             .orElseThrow { GeneralException(ErrorCode.ACCOUNT_NOT_FOUND) }
-        checkPassword(requestDto.password, member.password)
+        checkPassword(request.password, member.password)
+        return generateToken(member.id!!, member.role)
+    }
+
+    fun refresh(request: RefreshRequest): LoginResponse {
+        jwtTokenProvider.validateToken(request.refreshToken, true)
+        val oldRefreshToken = refreshTokenService.findRefreshToken(request.refreshToken)
+        val member = memberRepository.findById(oldRefreshToken.memberId)
+            .orElseThrow { GeneralException(ErrorCode.ACCOUNT_NOT_FOUND) }
+        refreshTokenService.deleteRefreshToken(oldRefreshToken.token)
         return generateToken(member.id!!, member.role)
     }
 
     private fun generateToken(memberId: Long, memberRole: MemberRole): LoginResponse {
         val accessToken = jwtTokenProvider.createAccessToken(memberId, memberRole, false)
         val refreshToken = jwtTokenProvider.createAccessToken(memberId, memberRole, true)
+        refreshTokenService.saveRefreshToken(memberId, refreshToken)
         return LoginResponse(memberId, accessToken, refreshToken)
     }
 
