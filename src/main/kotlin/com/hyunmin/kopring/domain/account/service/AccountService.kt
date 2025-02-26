@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service
 @Service
 class AccountService(
     private val memberRepository: MemberRepository,
+    private val refreshTokenService: RefreshTokenService,
     private val passwordEncoder: PasswordEncoder,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
@@ -38,6 +39,7 @@ class AccountService(
     private fun generateToken(memberId: Long, memberRole: MemberRole): LoginResponse {
         val accessToken = jwtTokenProvider.createAccessToken(memberId, memberRole, false)
         val refreshToken = jwtTokenProvider.createAccessToken(memberId, memberRole, true)
+        refreshTokenService.saveRefreshToken(memberId, refreshToken)
         return LoginResponse(memberId, accessToken, refreshToken)
     }
 
