@@ -20,4 +20,9 @@ class Member(
 
     @Enumerated(EnumType.STRING)
     var role: MemberRole = MemberRole.ROLE_USER
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun changePassword(password: String) {
+        this.password = password
+    }
+}
