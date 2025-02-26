@@ -26,10 +26,10 @@ class AccountService(
         return RegisterResponse(saved.id!!, saved.username, saved.role, saved.createdAt)
     }
 
-    fun login(requestDto: LoginRequest): LoginResponse {
-        val member = memberRepository.findByUsername(requestDto.username)
+    fun login(request: LoginRequest): LoginResponse {
+        val member = memberRepository.findByUsername(request.username)
             .orElseThrow { GeneralException(ErrorCode.ACCOUNT_NOT_FOUND) }
-        checkPassword(requestDto.password, member.password)
+        checkPassword(request.password, member.password)
         return generateToken(member.id!!, member.role)
     }
 

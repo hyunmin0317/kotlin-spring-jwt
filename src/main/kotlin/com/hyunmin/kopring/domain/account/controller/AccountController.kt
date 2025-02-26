@@ -23,14 +23,14 @@ class AccountController(
     }
 
     @PostMapping("/login")
-    fun login(@Valid @RequestBody requestDto: LoginRequest): ResponseEntity<LoginResponse> {
-        val responseDto = accountService.login(requestDto)
-        return ResponseEntity.ok(responseDto)
+    fun login(@Valid @RequestBody request: LoginRequest): ResponseEntity<LoginResponse> {
+        val response = accountService.login(request)
+        return ResponseEntity.ok(response)
     }
 
     @PostMapping("/refresh")
-    fun refresh(@Valid @RequestBody requestDto: RefreshRequest): ResponseEntity<LoginResponse> {
-        val responseDto = accountService.refresh(requestDto)
-        return ResponseEntity.ok(responseDto)
+    fun refresh(@Valid @RequestBody request: RefreshRequest): ResponseEntity<LoginResponse> {
+        val response = accountService.refresh(request)
+        return ResponseEntity.ok(response)
     }
 }
