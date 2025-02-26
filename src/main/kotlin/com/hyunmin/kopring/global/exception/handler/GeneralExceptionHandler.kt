@@ -4,6 +4,7 @@ import com.hyunmin.kopring.global.common.dto.ErrorResponse
 import com.hyunmin.kopring.global.exception.GeneralException
 import com.hyunmin.kopring.global.exception.code.ErrorCode
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -28,6 +29,13 @@ class GeneralExceptionHandler {
     fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse<Map<String, String>>> {
         log.warn("[WARNING] {} : {}", ex.javaClass, ex.message)
         return ErrorResponse.handle(ErrorCode.VALIDATION_FAILED, ex.fieldErrors)
+    }
+
+    // 데이터 무결성 위반(DataIntegrityViolationException) 처리 메서드
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleDataIntegrityViolationException(ex: DataIntegrityViolationException): ResponseEntity<ErrorResponse<Void>> {
+        log.warn("[WARNING] {} : {}", ex.javaClass, ex.message)
+        return ErrorResponse.handle(ErrorCode.VALIDATION_FAILED)
     }
 
     // 컨트롤러 메서드 파라미터의 유효성 검증 실패(HandlerMethodValidationException) 처리 메서드 - @PermissionCheckValidator
