@@ -1,9 +1,6 @@
 package com.hyunmin.kopring.domain.account.service
 
-import com.hyunmin.kopring.domain.account.dto.LoginRequest
-import com.hyunmin.kopring.domain.account.dto.LoginResponse
-import com.hyunmin.kopring.domain.account.dto.RegisterRequest
-import com.hyunmin.kopring.domain.account.dto.RegisterResponse
+import com.hyunmin.kopring.domain.account.dto.*
 import com.hyunmin.kopring.global.common.entity.Member
 import com.hyunmin.kopring.global.common.entity.enums.MemberRole
 import com.hyunmin.kopring.global.common.repository.MemberRepository
@@ -33,6 +30,15 @@ class AccountService(
         val member = memberRepository.findByUsername(requestDto.username)
             .orElseThrow { GeneralException(ErrorCode.ACCOUNT_NOT_FOUND) }
         checkPassword(requestDto.password, member.password)
+        return generateToken(member.id!!, member.role)
+    }
+
+    fun refresh(request: RefreshRequest): LoginResponse {
+        jwtTokenProvider.validateToken(request.refreshToken, true)
+        val oldRefreshToken = refreshTokenService.findRefreshToken(request.refreshToken)
+        val member = memberRepository.findById(oldRefreshToken.memberId)
+            .orElseThrow { GeneralException(ErrorCode.ACCOUNT_NOT_FOUND) }
+        refreshTokenService.deleteRefreshToken(oldRefreshToken.token)
         return generateToken(member.id!!, member.role)
     }
 
