@@ -9,6 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.HandlerMethodValidationException
 
 @RestControllerAdvice
 class GeneralExceptionHandler {
@@ -29,6 +30,13 @@ class GeneralExceptionHandler {
         return ErrorResponse.handle(ErrorCode.VALIDATION_FAILED, ex.fieldErrors)
     }
 
+    // 컨트롤러 메서드 파라미터의 유효성 검증 실패(HandlerMethodValidationException) 처리 메서드 - @PermissionCheckValidator
+    @ExceptionHandler(HandlerMethodValidationException::class)
+    fun handleHandlerMethodValidationException(ex: HandlerMethodValidationException): ResponseEntity<ErrorResponse<Void>> {
+        log.warn("[WARNING] {} : {}", ex.javaClass, ex.message)
+        return ErrorResponse.handle(extractErrorCode(ex))
+    }
+
     // 지원되지 않는 HTTP 메서드 요청(HttpRequestMethodNotSupportedException) 처리 메서드
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun handleHttpRequestMethodNotSupportedException(ex: HttpRequestMethodNotSupportedException): ResponseEntity<ErrorResponse<Void>> {
@@ -41,5 +49,16 @@ class GeneralExceptionHandler {
     fun handleException(ex: Exception): ResponseEntity<ErrorResponse<Void>> {
         log.error("[ERROR] {} : {}", ex.javaClass, ex.message, ex)
         return ErrorResponse.handle(ErrorCode.INTERNAL_SERVER_ERROR)
+    }
+
+    // HandlerMethodValidationException 에서 ErrorCode 를 추출하는 메서드
+    private fun extractErrorCode(ex: HandlerMethodValidationException): ErrorCode {
+        return ex.parameterValidationResults
+            .flatMap { result -> result.resolvableErrors }
+            .map { it.defaultMessage }
+            .filterNotNull()
+            .firstOrNull()
+            ?.let { ErrorCode.valueOf(it) }
+            ?: throw GeneralException(ErrorCode.BAD_REQUEST)
     }
 }
