@@ -45,4 +45,10 @@ class MemberController(
         val response = memberCommandService.changePassword(memberId, request)
         return ResponseEntity.ok(response)
     }
+
+    @DeleteMapping("/me")
+    fun deleteMember(@AuthMember memberId: Long): ResponseEntity<Void> {
+        memberCommandService.deleteMember(memberId)
+        return ResponseEntity.noContent().build()
+    }
 }

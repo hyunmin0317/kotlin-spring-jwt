@@ -23,4 +23,10 @@ class MemberCommandService(
         member.changePassword(newEncodedPw)
         return MemberInfoResponse(member.id!!, member.username, member.role, member.createdAt, member.updatedAt)
     }
+
+    fun deleteMember(id: Long) {
+        val member = memberRepository.findById(id)
+            .orElseThrow { GeneralException(ErrorCode.MEMBER_NOT_FOUND) }
+        memberRepository.delete(member)
+    }
 }
