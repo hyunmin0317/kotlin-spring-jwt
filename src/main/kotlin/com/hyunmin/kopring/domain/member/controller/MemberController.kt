@@ -5,6 +5,7 @@ import com.hyunmin.kopring.domain.member.dto.MemberInfoResponse
 import com.hyunmin.kopring.domain.member.service.MemberCommandService
 import com.hyunmin.kopring.domain.member.service.MemberQueryService
 import com.hyunmin.kopring.global.security.annotation.AuthMember
+import com.hyunmin.kopring.global.validation.annotation.PermissionCheck
 import jakarta.validation.Valid
 import org.springdoc.core.annotations.ParameterObject
 import org.springframework.data.domain.Page
@@ -26,7 +27,7 @@ class MemberController(
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<MemberInfoResponse> {
+    fun findById(@PermissionCheck @PathVariable id: Long): ResponseEntity<MemberInfoResponse> {
         val response = memberQueryService.findById(id)
         return ResponseEntity.ok(response)
     }
