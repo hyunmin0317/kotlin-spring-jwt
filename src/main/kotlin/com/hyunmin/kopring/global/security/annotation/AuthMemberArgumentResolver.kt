@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
  */
 @Component
 class AuthMemberArgumentResolver(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
 ) : HandlerMethodArgumentResolver {
 
     /**

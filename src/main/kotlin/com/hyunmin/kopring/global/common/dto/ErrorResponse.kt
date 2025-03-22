@@ -12,7 +12,7 @@ data class ErrorResponse<T>(
     val message: String,
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val detail: T? = null
+    val detail: T? = null,
 ) {
 
     fun toJsonString(): String = objectMapper.writeValueAsString(this)

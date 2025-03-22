@@ -1,9 +1,10 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.jpa") version "1.9.25"
+    id("com.google.devtools.ksp") version "1.9.25-1.0.20"
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("plugin.jpa") version "1.9.25"
     id("com.gorylenko.gradle-git-properties") version "2.4.2"
 }
 
@@ -43,6 +44,10 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
+
+    // Mapper
+    implementation("io.mcarle:konvert-api:4.0.1")
+    ksp("io.mcarle:konvert:4.0.1")
 
     // Databases
     runtimeOnly("com.h2database:h2")

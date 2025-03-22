@@ -11,5 +11,5 @@ import kotlin.reflect.KClass
 annotation class PermissionCheck(
     val message: String = "권한이 없습니다.",
     val groups: Array<KClass<*>> = [],
-    val payload: Array<KClass<out Payload>> = []
+    val payload: Array<KClass<out Payload>> = [],
 )

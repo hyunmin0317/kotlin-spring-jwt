@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class RefreshTokenService(
     private val refreshTokenRepository: RefreshTokenRepository,
-    private val jwtProperties: JwtProperties
+    private val jwtProperties: JwtProperties,
 ) {
 
     fun findRefreshToken(token: String): RefreshToken =
