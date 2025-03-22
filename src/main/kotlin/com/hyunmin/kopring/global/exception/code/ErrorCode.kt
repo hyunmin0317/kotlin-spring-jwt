@@ -3,9 +3,9 @@ package com.hyunmin.kopring.global.exception.code
 enum class ErrorCode(
     val value: Int,
     val code: String,
-    val message: String
+    val message: String,
 ) {
-    
+
     // Common Errors
     INTERNAL_SERVER_ERROR(500, "COMMON000", "서버 에러, 관리자에게 문의 바랍니다."),
     BAD_REQUEST(400, "COMMON001", "잘못된 요청입니다."),

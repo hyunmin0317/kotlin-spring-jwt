@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec
 @ConfigurationProperties(prefix = "jwt")
 data class JwtProperties(
     var secret: String = "",
-    var token: TokenProperties = TokenProperties()
+    var token: TokenProperties = TokenProperties(),
 ) {
 
     data class TokenProperties(

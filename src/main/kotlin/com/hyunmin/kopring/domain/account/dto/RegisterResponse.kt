@@ -7,5 +7,5 @@ data class RegisterResponse(
     val id: Long,
     val username: String,
     val memberRole: MemberRole,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
 )

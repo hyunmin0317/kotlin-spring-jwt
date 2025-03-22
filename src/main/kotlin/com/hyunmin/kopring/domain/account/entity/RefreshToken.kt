@@ -12,5 +12,5 @@ class RefreshToken(
     val memberId: Long,
 
     @TimeToLive
-    val expirationTime: Long
+    val expirationTime: Long,
 )

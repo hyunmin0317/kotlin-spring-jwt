@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class MemberQueryService(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
 ) {
 
     fun findAll(pageable: Pageable): Page<MemberInfoResponse> {

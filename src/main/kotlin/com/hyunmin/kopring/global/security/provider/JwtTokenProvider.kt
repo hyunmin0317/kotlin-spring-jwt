@@ -22,7 +22,7 @@ import java.util.*
  */
 @Component
 class JwtTokenProvider(
-    private val jwtProperties: JwtProperties
+    private val jwtProperties: JwtProperties,
 ) {
 
     /**

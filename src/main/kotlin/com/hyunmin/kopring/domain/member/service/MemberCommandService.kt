@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class MemberCommandService(
     private val memberRepository: MemberRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
 ) {
 
     fun changePassword(id: Long, request: ChangePasswordRequest): MemberInfoResponse {

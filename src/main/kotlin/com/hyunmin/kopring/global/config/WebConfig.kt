@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  */
 @Configuration
 class WebConfig(
-    private val authMemberArgumentResolver: AuthMemberArgumentResolver
+    private val authMemberArgumentResolver: AuthMemberArgumentResolver,
 ) : WebMvcConfigurer {
 
     // 커스텀 Argument Resolver 추가

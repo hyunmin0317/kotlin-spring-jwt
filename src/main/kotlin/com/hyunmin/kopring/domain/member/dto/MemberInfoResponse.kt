@@ -8,5 +8,5 @@ data class MemberInfoResponse(
     val username: String,
     val memberRole: MemberRole,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
 )

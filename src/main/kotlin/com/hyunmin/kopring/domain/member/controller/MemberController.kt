@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/members")
 class MemberController(
     private val memberQueryService: MemberQueryService,
-    private val memberCommandService: MemberCommandService
+    private val memberCommandService: MemberCommandService,
 ) {
 
     @GetMapping
