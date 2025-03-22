@@ -2,6 +2,7 @@ package com.hyunmin.kopring.domain.member.service
 
 import com.hyunmin.kopring.domain.member.dto.ChangePasswordRequest
 import com.hyunmin.kopring.domain.member.dto.MemberInfoResponse
+import com.hyunmin.kopring.domain.member.mapper.MemberMapperImpl
 import com.hyunmin.kopring.global.common.repository.MemberRepository
 import com.hyunmin.kopring.global.exception.GeneralException
 import com.hyunmin.kopring.global.exception.code.ErrorCode
@@ -21,7 +22,7 @@ class MemberCommandService(
             .orElseThrow { GeneralException(ErrorCode.MEMBER_NOT_FOUND) }
         val newEncodedPw = passwordEncoder.encode(request.password)
         member.changePassword(newEncodedPw)
-        return MemberInfoResponse(member.id!!, member.username, member.role, member.createdAt, member.updatedAt)
+        return MemberMapperImpl.toResponse(member)
     }
 
     fun deleteMember(id: Long) {
