@@ -1,7 +1,7 @@
 package com.hyunmin.kopring.domain.account.service
 
 import com.hyunmin.kopring.domain.account.dto.*
-import com.hyunmin.kopring.global.common.entity.Member
+import com.hyunmin.kopring.domain.account.mapper.AccountMapperImpl
 import com.hyunmin.kopring.global.common.entity.enums.MemberRole
 import com.hyunmin.kopring.global.common.repository.MemberRepository
 import com.hyunmin.kopring.global.exception.GeneralException
@@ -15,15 +15,15 @@ class AccountService(
     private val memberRepository: MemberRepository,
     private val refreshTokenService: RefreshTokenService,
     private val passwordEncoder: PasswordEncoder,
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
 ) {
 
     fun register(request: RegisterRequest): RegisterResponse {
         validateUsername(request.username)
         val encodedPw = passwordEncoder.encode(request.password)
-        val member = Member(username = request.username, password = encodedPw)
+        val member = AccountMapperImpl.toEntity(request, encodedPw)
         val saved = memberRepository.save(member)
-        return RegisterResponse(saved.id!!, saved.username, saved.role, saved.createdAt)
+        return AccountMapperImpl.toResponse(saved)
     }
 
     fun login(request: LoginRequest): LoginResponse {
@@ -46,7 +46,7 @@ class AccountService(
         val accessToken = jwtTokenProvider.createAccessToken(memberId, memberRole, false)
         val refreshToken = jwtTokenProvider.createAccessToken(memberId, memberRole, true)
         refreshTokenService.saveRefreshToken(memberId, refreshToken)
-        return LoginResponse(memberId, accessToken, refreshToken)
+        return AccountMapperImpl.toResponse(memberId, accessToken, refreshToken)
     }
 
     private fun validateUsername(username: String) {
